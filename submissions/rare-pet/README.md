@@ -6,7 +6,7 @@
 - **Category:** Character Spotlight; also relevant to Economy Potential.
 - **One sentence:** RarePet gives Genesis and Generations Rare Friends a Tamagotchi-inspired daily life: onchain care, a floating home, arcade play, shareable moments, an NFT-owned wallet, token launches, in-app trading and agent-assisted care.
 - **Working demo:** [rarepet.app](https://rarepet.app) · [Visual care guide](https://rarepet.app/docs/) · [AGENT page](https://rarepet.app/agent/) · [Download rarepet skill](https://rarepet.app/skills/rarepet.zip).
-- **Public source:** [xibot/rare-pet](https://github.com/xibot/rare-pet), submitted revision [ee5f7ca](https://github.com/xibot/rare-pet/tree/ee5f7cad053ee6cedb2e7d941cde6bf37ed14041).
+- **Agent distribution:** [self-contained rarepet skill ZIP](https://rarepet.app/skills/rarepet.zip) · [SHA-256 checksum](https://rarepet.app/skills/rarepet.zip.sha256) · [agent manifest](https://rarepet.app/agent/manifest.json). The application source repository is private; collaborators can request access from the builder.
 - **Stack:** React, TypeScript, SVG, Solidity and viem; FriendSDK **0.1.2** for wallet sessions and canonical identity, artwork and worlds; Doppler SDK **1.0.43** for launches.
 
 **Current V1:** onchain Pet, Feed and Poop are deployed and connected on Robinhood Chain. Rare Wallet, the Doppler launchpad and Buy / Sell are available inside the app. The AGENT page and downloadable rarepet skill support care checks, unsigned care plans and routines through an agent’s own authorized wallet and scheduler. Verified onchain Play XP and rarity-farming prize seasons remain later work. The wallet-free Preview is the simulated judging path; no purchase or transaction is needed to evaluate it.
@@ -30,7 +30,7 @@ The arcade supports keyboard and touch: Space/Up/W jumps and double-jumps, Down/
 
 ## Your Friend. Your agent.
 
-The **rarepet skill v1.0.1** gives humans and agents one entry point to RarePet. The [AGENT page](https://rarepet.app/agent/) includes a visual introduction, two installation paths, capability cards, copyable care/wallet/launch/trade prompts and direct downloads. The header Friend animates using its canonical idle frames.
+The **rarepet skill v1.0.2** gives humans and agents one entry point to RarePet. The [AGENT page](https://rarepet.app/agent/) includes a visual introduction, two installation paths, capability cards, copyable care/wallet/launch/trade prompts and direct downloads. The header Friend animates using its canonical idle frames.
 
 | Step | What the agent can do |
 | --- | --- |
@@ -38,10 +38,10 @@ The **rarepet skill v1.0.1** gives humans and agents one entry point to RarePet.
 | **Prepare** | Check the chain, contract identity, ownership and readiness, then simulate and produce unsigned Pet, Feed or Poop transactions |
 | **Care** | Use an authorized wallet integration to sign and send, then confirm the receipt and recorded result |
 
-Choose **Ask My Agent** to copy a setup prompt, or download and unzip [rarepet.zip](https://rarepet.app/skills/rarepet.zip), move the `rarepet` folder into the agent’s skills directory and start a new session. The bundled **Node.js 22** helper needs no npm dependencies or RarePet API key. From the source checkout, this is a read-only example:
+Choose **Ask My Agent** to copy a setup prompt, or download [rarepet.zip](https://rarepet.app/skills/rarepet.zip) and verify it against the [SHA-256 file](https://rarepet.app/skills/rarepet.zip.sha256). Unzip and move the `rarepet` folder into the agent’s skills directory, then start a new session. The archive includes the skill, references, CLI and license notices. The bundled **Node.js 22** helper needs no npm dependencies, RarePet API key or GitHub access. From the extracted skill directory, this is a read-only example:
 
 ```sh
-node skills/rarepet/scripts/rarepet.mjs status --collection generations --token-id 68356
+node scripts/rarepet.mjs status --collection generations --token-id 68356
 ```
 
 **An agent can own and care for its own Rare Friend.** Its signing wallet must be the NFT’s current owner. With explicit authorization covering the Friend, allowed care actions, gas budget and expiry, the agent’s own scheduler or cron job can check timers and perform care when ready. The helper itself never signs, broadcasts or schedules; installing the skill grants no wallet access. Each run rechecks ownership and live rules and resolves any pending transaction before retrying.
@@ -109,13 +109,13 @@ Trades use existing Uniswap V3/V4 infrastructure and the launched tokens' Dopple
 | **Care ledger** | [0x0082229d9592292E2542cb29a6b94d9a2F22d124](https://robinhoodchain.blockscout.com/address/0x0082229d9592292E2542cb29a6b94d9a2F22d124?tab=contract) | Verified — exact match |
 | **Launch router** | [0xc6a4b2D4D369747B26e4Ff805a79A57da2505dC3](https://robinhoodchain.blockscout.com/address/0xc6a4b2D4D369747B26e4Ff805a79A57da2505dC3?tab=contract) | Verified — partial match |
 
-Source badges were checked on September 26, 2026. Exact deployed runtime and configuration checks are recorded separately in the [care manifest](https://github.com/xibot/rare-pet/blob/ee5f7cad053ee6cedb2e7d941cde6bf37ed14041/contracts/rare-pet/deployments/4663.json) and [launch manifest](https://github.com/xibot/rare-pet/blob/ee5f7cad053ee6cedb2e7d941cde6bf37ed14041/contracts/rare-launchpad/deployments/4663-0xc6a4b2d4d369747b26e4ff805a79a57da2505dc3.json). **Source verification is not a security audit; the custom RarePet contracts have not been independently audited.**
+Source badges were checked on September 26, 2026. The [agent manifest](https://rarepet.app/agent/manifest.json) publishes deployed addresses and pinned runtime identities; the skill checks live code before planning care. **Source verification is not a security audit; the custom RarePet contracts have not been independently audited.**
 
 The original router, `0x8c46baA63079B8648b1cd5689058E0AAB33DF063`, remains for historical launch discovery and fee claims, not new launches. It does not have its own verified-source badge. Historical holder-reward experiments are not used by V1.
 
 ## Run locally
 
-Use **Node.js 22.18 or later in the 22.x line** and npm:
+The complete application source is available to authorized GitHub collaborators. Use **Node.js 22.18 or later in the 22.x line** and npm:
 
 ```sh
 git clone https://github.com/xibot/rare-pet.git
@@ -127,7 +127,7 @@ npm run dev
 
 Open **http://localhost:4175**. No secrets or environment variables are needed for the Preview demo. `npm run build` produces `dist-pet/`, including the main app, `/docs/`, `/agent/`, the skill ZIP and agent-readable resources. Launch opens from its Daily Care action. Live contract addresses, image storage and server-side routing use the documented configuration; never put a private key in the frontend.
 
-See the [source README](https://github.com/xibot/rare-pet/blob/ee5f7cad053ee6cedb2e7d941cde6bf37ed14041/README.md) and [developer guide](https://github.com/xibot/rare-pet/blob/ee5f7cad053ee6cedb2e7d941cde6bf37ed14041/docs/DEVELOPMENT.md) for configuration, contract tests, browser suites and validation records.
+The public [Docs](https://rarepet.app/docs/) and [Agent guide](https://rarepet.app/agent/) cover product behavior and the self-contained agent installation. Collaborators can read the source README and developer guide in the private repository.
 
 ## Checks and known limitations
 
@@ -140,6 +140,6 @@ See the [source README](https://github.com/xibot/rare-pet/blob/ee5f7cad053ee6ced
 
 ## Credits
 
-App, interface and gameplay: **XIBOT**. Rare Friends character artwork, canonical body frames and six complete Worlds presets come from Rare Friends/FriendSDK, preserving original artwork and notices. Classic floors and care effects are decorative interface artwork. The habitat’s two 8-bit soundtracks and care effects are generated in the browser with Web Audio. Doppler supplies launch modules/SDK, and Uniswap supplies trading infrastructure. Silkscreen, Archivo and Sometype Mono retain their font licenses. See [third-party notices](https://github.com/xibot/rare-pet/blob/ee5f7cad053ee6cedb2e7d941cde6bf37ed14041/THIRD_PARTY_NOTICES.md).
+App, interface and gameplay: **XIBOT**. Rare Friends character artwork, canonical body frames and six complete Worlds presets come from Rare Friends/FriendSDK, preserving original artwork and notices. Classic floors and care effects are decorative interface artwork. The habitat’s two 8-bit soundtracks and care effects are generated in the browser with Web Audio. Doppler supplies launch modules/SDK, and Uniswap supplies trading infrastructure. Silkscreen, Archivo and Sometype Mono retain their font licenses. See the hosted [third-party notices](https://rarepet.app/skills/rarepet/references/third-party-notices.md).
 
 **Take care. Play. Stay rare.**
